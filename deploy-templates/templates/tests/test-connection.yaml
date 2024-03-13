@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "dotnet6-imp-def-dep.fullname" . }}-test-connection"
+  labels:
+    {{- include "dotnet6-imp-def-dep.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "dotnet6-imp-def-dep.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
